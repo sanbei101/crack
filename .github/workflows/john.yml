@@ -1,0 +1,55 @@
+name: Build and Release zip2john
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-john:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential libssl-dev zlib1g-dev p7zip-full
+
+      - name: Clone John the Ripper
+        run: git clone https://github.com/openwall/john --depth 1 -b bleeding-jumbo john
+        
+      - name: Download Hashcat
+        run: |
+          wget -O hashcat.7z https://hashcat.net/files/hashcat-7.1.2.7z
+          7z x hashcat.7z -ohashcat
+
+      - name: Download rockyou
+        run: |
+          wget -O rockyou.txt https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt        
+
+      - name: Compile John the Ripper
+        run: |
+          cd john/src
+          ./configure
+          make -s clean
+          make -sj$(nproc)
+
+      - name: Create Zip Archive
+        run: |
+          zip -r john.zip john
+          zip -r hashcat.zip hashcat.7z
+          
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v3
+        with:
+          files: |
+            john.zip
+            hashcat.zip
+            rockyou.txt
+          tag_name: crack
+          name: Release crack
