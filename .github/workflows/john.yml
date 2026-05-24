@@ -39,10 +39,14 @@ jobs:
           make -s clean
           make -sj$(nproc)
 
+      - name: Strip Binaries
+        run: |
+          find john/run/ -maxdepth 1 -type f -executable -exec strip {} + 2>/dev/null || true
+          
       - name: Create Zip Archive
         run: |
           zip -r john.zip john
-          zip -r hashcat.zip hashcat.7z
+          zip -r hashcat.zip hashcat
           
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v3

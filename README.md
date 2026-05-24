@@ -16,8 +16,21 @@ unzip -d hashcat hashcat.zip
 ```
 
 ## 使用`HashCat`
+
+### 穷举模式
 ```
 ./hashcat/hashcat.bin -m 17200 -a 3 -w 4 \
   -i --increment-min 4 --increment-max 9 \
   hash.txt ?a?a?a?a?a?a?a?a?a
+```
+
+### 密码字典模式
+```
+wget https://github.com/sanbei101/crack/releases/download/crack/rockyou.txt
+```
+
+```
+./hashcat/hashcat.bin -m 17200 -a 0 -w 4 \
+  -r ./hashcat/rules/best64.rule \
+  hash.txt rockyou.txt
 ```
