@@ -26,7 +26,8 @@ jobs:
       - name: Download Hashcat
         run: |
           wget -O hashcat.7z https://hashcat.net/files/hashcat-7.1.2.7z
-          7z x hashcat.7z -ohashcat
+          7z x hashcat.7z
+          mv hashcat-7.1.2 hashcat
 
       - name: Download rockyou
         run: |
