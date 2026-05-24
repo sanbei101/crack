@@ -6,7 +6,7 @@ unzip -q john.zip
 
 ## 测试
 ```
-zip -P -r 123456pwd test.zip .git
+zip -r -P  123456pwd test.zip .github
 
 ./john/run/zip2john test.zip > raw_hash.txt
 ```
